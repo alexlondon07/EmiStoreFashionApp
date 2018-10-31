@@ -4,7 +4,7 @@ import {
     Alert,
     StyleSheet,
 } from 'react-native';
-import { Text, Container, Content, List, ListItem, Icon, Left , Right} from 'native-base';
+import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
 
 import HttpCategory from "./../../services/category/http-category";
 import ItemCategory from './components/item-category';
@@ -16,18 +16,21 @@ class Category extends Component{
         super(props);
         this.state = {
             categoriesList: [],
-            arrayholder: []
+            arrayholder: [],
+            categoriesListAux: []
         }
         this.getDataCategories();
     }
-
+    
     static navigationOptions = ({ navigation }) => {
         return {
-            header: (
+            header: props => (
                 <CustomHeader
-                    title = "Category List"
                     nameIcon = "ios-home"
-                    isHome = {true}
+                    title = { 'Category List' }
+                    navigation = { navigation }
+                    hasBackButtom= { props.navigation.state.routes.length > 1 }
+                    onResult={ this.onResult }
                 />
             )
         }
@@ -35,6 +38,21 @@ class Category extends Component{
 
     componentDidMount = () => { 
         this.getDataCategories();
+    }
+
+    onResult = data => {
+        //Objeto retornado del servicio, Agregar Categoria
+        const element = {};
+        element.name = data.name;
+        element.description = data.description; 
+        element.enable = data.enable;
+        element.idCategory = data.idCategory;
+        
+        this.state.categoriesListAux = this.state.categoriesList;
+        this.state.categoriesListAux.push(element)
+        this.setState({
+            categoriesList: this.state.categoriesListAux,
+        });
     }
 
     /**
@@ -47,10 +65,6 @@ class Category extends Component{
             arrayholder: data,
         });
     }
-    handleClick(item){
-        Alert.alert("I am clicked " + item.name);
-    }
-    renderItem = ( { item }) => <ItemCategory navigation = { this.props.navigation } category = { item } />
     separatorComponent = () => <ItemSeparator />;
     emptyComponent = () => <Text> Categories not found </Text>
     keyExtractor = item => item.idCategory.toString();
@@ -58,13 +72,13 @@ class Category extends Component{
         return (
             <Container>
                 <Content>
-                <List 
+                <List
                     dataArray = { this.state.categoriesList }
                     renderRow = { item =>{
                         return(
                             <ListItem>
                                 <Left>
-                                    <ItemCategory navigation = { this.props.navigation } category = { item } />
+                                    <ItemCategory navigation = { this.props.navigation } category = { item }  />
                                 </Left>
                                 <Right>
                                     <Icon name = "arrow-forward" />
@@ -74,6 +88,17 @@ class Category extends Component{
                     }}
                 />
                 </Content>
+                <View>
+                <Fab
+                    active={this.state.active}
+                    direction="up"
+                    containerStyle={{ }}
+                    style={{ backgroundColor: '#5067FF' }}
+                    position="bottomRight"
+                    onPress = { ()=> this.props.navigation.navigate('CategoryDetailScreen',  { onResult: this.onResult } ) } >
+                    <Icon name="ios-add" />
+                </Fab>
+                </View>
             </Container>
         )
     }

@@ -9,7 +9,7 @@ import {
 
 const ItemCategory = (props) => (
     <TouchableHighlight
-        onPress = { ()=> props.navigation.navigate('CategoryDetailScreen', { id: props.category } ) }
+        //onPress = { ()=> props.navigation.navigate('CategoryDetailScreen',  { onResult: this.onResult } ) }
         underlayColor = "#ccc">
         <View>
             <Text style={ styles.name }>{ props.category.name }</Text>

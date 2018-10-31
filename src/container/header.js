@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Left, Icon, Button, Body , Title} from 'native-base';
+import { Header, Left, Icon, Button, Body , Title, Right} from 'native-base';
 
 class CustomHeader extends Component {
 
@@ -22,8 +22,15 @@ class CustomHeader extends Component {
                     </Button>
                 </Left>
                 <Body>
-                    <Title> { title }</Title>
+                    <Title>{ title }</Title>
                 </Body>
+                <Right>
+                    {/* <Button 
+                        transparent
+                        onPress={ ()=> navigation.navigate('CategoryDetailScreen', { onResult: this.props.onResult }) }>
+                        <Icon name= { 'ios-add-circle' }/>
+                    </Button> */}
+                </Right>
             </Header>
         );
     }

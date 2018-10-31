@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import {
-  View,
-  StyleSheet,
-  Alert
+    View,
+    StyleSheet,
+    Alert
 } from "react-native";
 import {Icon, Button, Label, Container, Content, Form, Item, Input, Text} from 'native-base';
+import HttpCategory from "../../services/category/http-category";
 
 class CategoryDetail extends Component {
 
@@ -16,14 +17,13 @@ class CategoryDetail extends Component {
             description: "",
             errorMessage: null,
             isAddNew: true,
-      };
+        };
     }   
-
-
+        
     goBackPreviewScreen (data) {
         const { navigation } = this.props;
         navigation.goBack();
-        //navigation.state.params.onResult(data)
+        navigation.state.params.onResult(data)
     }
     
     saveDataCategory = async () =>{
@@ -38,6 +38,7 @@ class CategoryDetail extends Component {
                 if(data.errorMessage){
                     alert(data.errorMessage);
                 }else{
+                    alert('Category successfully created');
                     this.goBackPreviewScreen(data);
                 }
             }else{
@@ -48,20 +49,13 @@ class CategoryDetail extends Component {
         }
     }
 
-    _onChangeText (field, text) {
-      console.log(text);
-      this.setState({
-        field: text
-      })
-    }
-    
     render() {
         return (
-          <Container>
+        <Container>
             <Content>
                 <Form>
                     <Item stackedLabel>
-                      <Label>Name</Label>
+                        <Label>Name</Label>
                         <Input
                             autoCorrect={false}
                             autoCapitalize="none"
@@ -72,7 +66,7 @@ class CategoryDetail extends Component {
                     </Item>
 
                     <Item stackedLabel last>
-                        <Label>Name</Label>
+                        <Label>Description</Label>
                         <Input
                             autoCorrect={false}
                             autoCapitalize="none"
@@ -81,7 +75,7 @@ class CategoryDetail extends Component {
                             onChangeText={ (description) => { this.setState({ description })  } }
                             value= {this.state.description} />
                     </Item>
-                    
+
                     <View style={styles.container_button}>
                         <Button large primary
                             onPress={() => {
@@ -98,7 +92,7 @@ class CategoryDetail extends Component {
 
                 </Form>
             </Content>
-          </Container>
+        </Container>
         );
     }
 }
