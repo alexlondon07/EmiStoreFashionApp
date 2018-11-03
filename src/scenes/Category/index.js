@@ -1,9 +1,5 @@
 import React, {Component} from 'react'
-import {
-    FlatList,
-    Alert,
-    StyleSheet,
-} from 'react-native';
+import { ListView , Alert} from 'react-native';
 import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
 
 import HttpCategory from "./../../services/category/http-category";
@@ -14,22 +10,23 @@ class Category extends Component{
 
     constructor(props){
         super(props);
+        this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             categoriesList: [],
-            arrayholder: [],
-            categoriesListAux: []
+            categoriesListAux: [],
+            basic: true,
         }
-        this.getDataCategories();
     }
     
     static navigationOptions = ({ navigation }) => {
         return {
             header: props => (
                 <CustomHeader
-                    nameIcon = "ios-home"
+                    nameIcon = "ios-menu"
                     title = { 'Category List' }
                     navigation = { navigation }
-                    hasBackButtom= { props.navigation.state.routes.length > 1 }
+                    hasBackButtom= { true }
+                    //hasBackButtom= { props.navigation.state.routes.length > 1 }
                     onResult={ this.onResult }
                 />
             )
@@ -40,6 +37,17 @@ class Category extends Component{
         this.getDataCategories();
     }
 
+    deleteRow(item, secId, rowId, rowMap) {
+        Alert.alert(
+            'Delete Item',
+            'You are sure to remove *' + item.name + '*',
+                [
+                    {text: 'No', onPress: () => rowMap[`${secId}${rowId}`].props.closeRow() },
+                    {text: 'Yes', onPress: () => this.deleteCategory(item.idCategory, secId, rowId, rowMap) },
+                ]
+            );
+    }
+
     onResult = data => {
         //Objeto retornado del servicio, Agregar Categoria
         const element = {};
@@ -47,12 +55,28 @@ class Category extends Component{
         element.description = data.description; 
         element.enable = data.enable;
         element.idCategory = data.idCategory;
-        
-        this.state.categoriesListAux = this.state.categoriesList;
-        this.state.categoriesListAux.push(element)
-        this.setState({
-            categoriesList: this.state.categoriesListAux,
-        });
+        this.getDataCategories();
+    }
+
+    async deleteCategory(id, secId, rowId, rowMap){
+        try {
+            const data = await HttpCategory.deleteCategory(id);
+            if(data){
+                if(data.status == 200){                    
+                    //Eliminamos de la Lista el Item Eliminado
+                    rowMap[`${secId}${rowId}`].props.closeRow();
+                    const newData = [...this.state.categoriesList];
+                    newData.splice(rowId, 1);
+                    this.setState({ categoriesList: newData });
+
+                }else{
+                    alert('Cannot delete item');
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            alert('An error has occurred, try it later');
+        }
     }
 
     /**
@@ -62,8 +86,8 @@ class Category extends Component{
         const data = await HttpCategory.getHttpCategories();
         this.setState({
             categoriesList: data,
-            arrayholder: data,
         });
+        console.log(data);
     }
     separatorComponent = () => <ItemSeparator />;
     emptyComponent = () => <Text> Categories not found </Text>
@@ -73,6 +97,9 @@ class Category extends Component{
             <Container>
                 <Content>
                 <List
+                    leftOpenValue={75}
+                    rightOpenValue={-75}
+                    dataSource={this.ds.cloneWithRows(this.state.categoriesList)}
                     dataArray = { this.state.categoriesList }
                     renderRow = { item =>{
                         return(
@@ -86,6 +113,14 @@ class Category extends Component{
                             </ListItem>
                         );
                     }}
+                    renderLeftHiddenRow={item =>
+                        <Button full onPress={() => alert(item.idCategory)}>
+                            <Icon active name="information-circle" />
+                        </Button>}
+                    renderRightHiddenRow={(item, secId, rowId, rowMap) =>
+                        <Button full danger onPress={_ => this.deleteRow(item, secId, rowId, rowMap)}>
+                            <Icon active name="trash" />
+                        </Button>}
                 />
                 </Content>
                 <View>

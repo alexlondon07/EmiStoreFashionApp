@@ -1,24 +1,25 @@
 import React, {Component} from 'react';
 import { Container, Header, Title, Content, Footer, Card, CardItem, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import CustomHeader from '../../container/header';
 
 class Home extends Component {
+    
+    static navigationOptions = ({ navigation }) => {
+        return {
+            header: props => (
+                <CustomHeader
+                    nameIcon = "ios-menu"
+                    title = { 'Home' }
+                    navigation = { navigation }
+                    hasBackButtom= { true }
+                />
+            )
+        }
+    }
     render() {
         const { navigation } = this.props;
         return (
             <Container>
-                <Header>
-                    <Left>
-                        <Button
-                            transparent
-                            onPress= { ()=> navigation.openDrawer() }
-                        >
-                        <Icon name="menu"/>
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Home</Title>
-                    </Body>
-                </Header>
                 <Content>
                 <Card>
                     <CardItem>

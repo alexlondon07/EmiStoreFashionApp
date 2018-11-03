@@ -10,13 +10,13 @@ class CustomHeader extends Component {
     }
 
     render() {
-        const { navigation, title, nameIcon, isHome } = this.props;
+        const { navigation, title, nameIcon, hasBackButtom } = this.props;
         return (
             <Header>
                 <Left>
                     <Button
                         transparent
-                        onPress= { (isHome) ? ()=> navigation.openDrawer(): ()=>navigation.goBack(null)}
+                        onPress= { (hasBackButtom) ? ()=> navigation.openDrawer(): ()=>navigation.goBack(null)}
                     >
                     <Icon name= { nameIcon }/>
                     </Button>
@@ -29,7 +29,7 @@ class CustomHeader extends Component {
                         transparent
                         onPress={ ()=> navigation.navigate('CategoryDetailScreen', { onResult: this.props.onResult }) }>
                         <Icon name= { 'ios-add-circle' }/>
-                    </Button> */}
+                    </Button>  */}
                 </Right>
             </Header>
         );

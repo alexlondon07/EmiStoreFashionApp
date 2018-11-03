@@ -4,12 +4,11 @@ import {
     View,
     StyleSheet ,
     TouchableHighlight,
-    Alert
 } from 'react-native';
 
 const ItemCategory = (props) => (
     <TouchableHighlight
-        //onPress = { ()=> props.navigation.navigate('CategoryDetailScreen',  { onResult: this.onResult } ) }
+        onPress = { ()=> props.navigation.navigate('CategoryDetailScreen',  { onResult: props.onResult, category: props.category } ) }
         underlayColor = "#ccc">
         <View>
             <Text style={ styles.name }>{ props.category.name }</Text>
@@ -23,10 +22,12 @@ const styles = StyleSheet.create({
         color: '#6b6b6b',
         fontSize: 14,
         fontWeight: 'bold',
+        marginLeft: 10
     },
     description:{
         color: '#6b6b6b',
         fontSize: 12,
+        marginLeft: 10
     }
 });
 

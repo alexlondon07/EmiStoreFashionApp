@@ -13,6 +13,17 @@ class HttpCategory {
         }
     }
 
+    async deleteCategory(id){
+        try {
+            const url  = `${ BASE_API }${ HTTP_CATEGORY.deleteCategory }${ id }`
+            const data = await httpBase.baseDelete(url, {});
+            console.log(url)
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async saveHttpCategories(params){
         try {
             const url  = `${ BASE_API }${ HTTP_CATEGORY.saveCategory }`
@@ -26,6 +37,22 @@ class HttpCategory {
             console.log(error);
         }
     }
+
+    async updateHttpCategory(params){
+        try {
+            const url  = `${ BASE_API }${ HTTP_CATEGORY.updateCategory }${ params.idCategory }`
+            const config = {
+                header: {},
+                params
+            }
+            console.log(url);
+            const data = await httpBase.basePatch(url, config);
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 }
 
 export default new HttpCategory;

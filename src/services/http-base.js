@@ -17,6 +17,20 @@ class HttpBase{
             throw new Error(error)   
         }
     }
+    async basePatch(url, config){
+        try {
+            const options = {
+                method: 'PATCH',
+                headers: this.headersConfig(config.headers),
+                body: JSON.stringify(config.params)
+            }
+            let query = await this.callHttp(url, options);
+            const data = await query.json();
+            return data;
+        } catch (error) {
+            throw new Error(error)   
+        }
+    }
 
     async baseGet(url, config){
         try {
@@ -33,6 +47,22 @@ class HttpBase{
         }
     }
 
+
+    async baseDelete(url, config){
+        try {
+            const options = {
+                method: 'DELETE',
+                headers: this.headersConfig(config.headers),
+            }
+            let query = await this.callHttp(url, options);
+            const data = await query;
+            return data;
+
+        } catch (error) {
+            throw new Error(error)   
+        }
+    }
+    
     async baseGetParams(url, config){
         const options = {
             method: 'GET',

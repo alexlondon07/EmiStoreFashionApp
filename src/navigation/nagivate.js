@@ -8,8 +8,12 @@ import Category from '../scenes/Category/index';
 import CategoryDetail from '../scenes/CategoryDetail';
 
 const stackApp = createStackNavigator({
+    HomeScreen:{  screen: Home },
     CategoryScreen:{  screen: Category },
     CategoryDetailScreen:{  screen: CategoryDetail },
+    CustomHeaderScreen:{  screen: CustomHeader },
+},{
+    initialRouteName: 'CategoryScreen'
 })
 
 const stackSettings = createStackNavigator({
@@ -18,10 +22,7 @@ const stackSettings = createStackNavigator({
 
 export const Nav = DrawerNavigator({
     AppScreen:{  screen: stackApp },
-    HomeScreen:{  screen: Home },
-    CustomHeaderScreen:{  screen: CustomHeader },
     SettingsScreen:{  screen: stackSettings },
-    
 },{
     contentComponent: SideMenu
 });
