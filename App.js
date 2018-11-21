@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
-import { Nav } from './src/navigation/nagivate';
+import React, {Component} from 'react';
+import MyAppStore from './src/myApp';
 
-class App extends Component {
+export default class App extends Component {
     render() {
         return (
-            <Nav/>
-        )
+            <MyAppStore/>
+        );
     }
 }
-export default App;

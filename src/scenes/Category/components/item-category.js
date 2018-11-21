@@ -8,9 +8,9 @@ import {
 
 const ItemCategory = (props) => (
     <TouchableHighlight
-        onPress = { ()=> props.navigation.navigate('CategoryDetailScreen',  { onResult: props.onResult, category: props.category } ) }
+        onPress = { ()=> props.navigation.navigate('CategoryFormScreen',  { onResult: props.onResult, category: props.category } ) }
         underlayColor = "#ccc">
-        <View>
+        <View style={styles.container}>
             <Text style={ styles.name }>{ props.category.name }</Text>
             <Text style={ styles.description }>{ props.category.description }</Text>
         </View>
@@ -18,6 +18,10 @@ const ItemCategory = (props) => (
 );
 
 const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        borderColor: 'red',
+    },
     name:{
         color: '#6b6b6b',
         fontSize: 14,

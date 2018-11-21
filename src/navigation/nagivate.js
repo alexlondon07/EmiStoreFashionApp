@@ -5,15 +5,15 @@ import Home from '../scenes/Home';
 import SideMenu from './side-menu';
 import CustomHeader from '../container/header';
 import Category from '../scenes/Category/index';
-import CategoryDetail from '../scenes/CategoryDetail';
+import CategoryForm from '../scenes/CategoryForm';
 
 const stackApp = createStackNavigator({
     HomeScreen:{  screen: Home },
     CategoryScreen:{  screen: Category },
-    CategoryDetailScreen:{  screen: CategoryDetail },
+    CategoryFormScreen:{  screen: CategoryForm },
     CustomHeaderScreen:{  screen: CustomHeader },
 },{
-    initialRouteName: 'CategoryScreen'
+    initialRouteName: 'HomeScreen',
 })
 
 const stackSettings = createStackNavigator({

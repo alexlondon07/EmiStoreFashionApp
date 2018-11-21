@@ -1,9 +1,7 @@
 import React, {Component} from 'react'
-import { ListView , Alert} from 'react-native';
+import { ListView , Alert, StyleSheet, ActivityIndicator } from 'react-native';
 import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
-
 import HttpCategory from "./../../services/category/http-category";
-import ItemCategory from './components/item-category';
 import CustomHeader from '../../container/header';
 
 class Category extends Component{
@@ -13,11 +11,9 @@ class Category extends Component{
         this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
         this.state = {
             categoriesList: [],
-            categoriesListAux: [],
-            basic: true,
+            loading: true 
         }
     }
-    
     static navigationOptions = ({ navigation }) => {
         return {
             header: props => (
@@ -27,14 +23,13 @@ class Category extends Component{
                     navigation = { navigation }
                     hasBackButtom= { true }
                     //hasBackButtom= { props.navigation.state.routes.length > 1 }
-                    onResult={ this.onResult }
                 />
             )
         }
     }
 
-    componentDidMount = () => { 
-        this.getDataCategories();
+    componentDidMount = () =>{ 
+        this.getDataCategories()
     }
 
     deleteRow(item, secId, rowId, rowMap) {
@@ -43,32 +38,29 @@ class Category extends Component{
             'You are sure to remove *' + item.name + '*',
                 [
                     {text: 'No', onPress: () => rowMap[`${secId}${rowId}`].props.closeRow() },
-                    {text: 'Yes', onPress: () => this.deleteCategory(item.idCategory, secId, rowId, rowMap) },
+                    {text: 'Yes', onPress: () => this.deleteCategory(item, secId, rowId, rowMap) },
                 ]
             );
     }
 
     onResult = data => {
-        //Objeto retornado del servicio, Agregar Categoria
-        const element = {};
-        element.name = data.name;
-        element.description = data.description; 
-        element.enable = data.enable;
-        element.idCategory = data.idCategory;
         this.getDataCategories();
     }
 
-    async deleteCategory(id, secId, rowId, rowMap){
+    infoItem(item){
+        alert('Ide Category Nº ' + item.idCategory);
+    }
+
+    async deleteCategory(item, secId, rowId, rowMap){
         try {
-            const data = await HttpCategory.deleteCategory(id);
+            const data = await HttpCategory.deleteCategory(item.idCategory);
             if(data){
-                if(data.status == 200){                    
-                    //Eliminamos de la Lista el Item Eliminado
+                if(data.status == 200){          
+                    //Removemos de la Lista el Item Eliminado
                     rowMap[`${secId}${rowId}`].props.closeRow();
                     const newData = [...this.state.categoriesList];
                     newData.splice(rowId, 1);
                     this.setState({ categoriesList: newData });
-
                 }else{
                     alert('Cannot delete item');
                 }
@@ -79,34 +71,41 @@ class Category extends Component{
         }
     }
 
-    /**
-     * Metodo para Obtener las Categorias de nuestra Api
-     */
     async getDataCategories(){
         const data = await HttpCategory.getHttpCategories();
-        this.setState({
-            categoriesList: data,
-        });
-        console.log(data);
+        if(data){
+            this.setState({ categoriesList: data, loading: false })
+        }
     }
-    separatorComponent = () => <ItemSeparator />;
+
     emptyComponent = () => <Text> Categories not found </Text>
     keyExtractor = item => item.idCategory.toString();
     render(){
         return (
             <Container>
                 <Content>
+                    { this.state.loading && 
+
+                            <View>
+                            <ActivityIndicator
+                            size="large"
+                            color="#0000ff"
+                            />
+                        </View>
+                    }
+
                 <List
                     leftOpenValue={75}
                     rightOpenValue={-75}
                     dataSource={this.ds.cloneWithRows(this.state.categoriesList)}
-                    dataArray = { this.state.categoriesList }
-                    renderRow = { item =>{
+                    dataArray ={ this.state.categoriesList }
+                    renderRow = { item => {
                         return(
-                            <ListItem>
-                                <Left>
-                                    <ItemCategory navigation = { this.props.navigation } category = { item }  />
-                                </Left>
+                            <ListItem  onPress = { ()=> this.props.navigation.navigate('CategoryFormScreen',  { onResult: this.onResult, category: item } ) }>
+                                <View style={styles.container}>
+                                    <Text style={ styles.name }>{ item.name }</Text>
+                                    <Text style={ styles.description }>{ item.description }</Text>
+                                </View>
                                 <Right>
                                     <Icon name = "arrow-forward" />
                                 </Right>
@@ -114,7 +113,7 @@ class Category extends Component{
                         );
                     }}
                     renderLeftHiddenRow={item =>
-                        <Button full onPress={() => alert(item.idCategory)}>
+                        <Button full onPress={() => this.infoItem(item)}>
                             <Icon active name="information-circle" />
                         </Button>}
                     renderRightHiddenRow={(item, secId, rowId, rowMap) =>
@@ -130,7 +129,7 @@ class Category extends Component{
                     containerStyle={{ }}
                     style={{ backgroundColor: '#5067FF' }}
                     position="bottomRight"
-                    onPress = { ()=> this.props.navigation.navigate('CategoryDetailScreen',  { onResult: this.onResult } ) } >
+                    onPress = { ()=> this.props.navigation.navigate('CategoryFormScreen',  { onResult: this.onResult } ) } >
                     <Icon name="ios-add" />
                 </Fab>
                 </View>
@@ -138,4 +137,23 @@ class Category extends Component{
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        borderColor: 'red',
+    },
+    name:{
+        color: '#6b6b6b',
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginLeft: 10
+    },
+    description:{
+        color: '#6b6b6b',
+        fontSize: 12,
+        marginLeft: 10
+    }
+});
+
 export default Category;

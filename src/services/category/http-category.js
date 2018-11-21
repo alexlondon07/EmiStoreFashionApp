@@ -17,7 +17,6 @@ class HttpCategory {
         try {
             const url  = `${ BASE_API }${ HTTP_CATEGORY.deleteCategory }${ id }`
             const data = await httpBase.baseDelete(url, {});
-            console.log(url)
             return data;
         } catch (error) {
             console.log(error);
@@ -45,7 +44,6 @@ class HttpCategory {
                 header: {},
                 params
             }
-            console.log(url);
             const data = await httpBase.basePatch(url, config);
             return data;
         } catch (error) {

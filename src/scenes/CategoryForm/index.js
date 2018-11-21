@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import {
-    Alert
+    Alert,
 } from "react-native";
 import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text} from 'native-base';
-
 import HttpCategory from "../../services/category/http-category";
 import CustomHeader from '../../container/header';
 
-class CategoryDetail extends Component {
+class CategoryForm extends Component {
 
     constructor(props) {
         super(props);
@@ -22,7 +21,7 @@ class CategoryDetail extends Component {
             category: null
         };
     }   
-        
+
     static navigationOptions = ({ navigation }) => {
         return {
             header: props => (
@@ -48,13 +47,12 @@ class CategoryDetail extends Component {
                 description: category.description 
             })
         }
-        console.log('data in componentDidMount: ' +category)
     }
 
-    goBackPreviewScreen (data) {
+    async refreshList (data) {
         const { navigation } = this.props;
         navigation.goBack();
-        navigation.state.params.onResult(data)
+        navigation.state.params.onResult(data);
     }
 
     validateForm(){
@@ -81,14 +79,15 @@ class CategoryDetail extends Component {
                 description: this.state.description,
                 enable: 'S'
             }
-            const data =  await params.idCategory > 0 ? HttpCategory.updateHttpCategory(params):  HttpCategory.saveHttpCategories(params) ;
+            const data =  params.idCategory > 0 ? await HttpCategory.updateHttpCategory(params): await HttpCategory.saveHttpCategories(params) ;
+            console.log(data);
             if(data){
                 if(data.errorMessage){
                     alert(data.errorMessage);
                 }else{
-                    const msj = 'Category successfully';
-                    params.idCategory > 0 ? alert(msj+ ' updated'): alert(msj+' created');
-                    this.goBackPreviewScreen(data);
+                    //const msj = 'Category successfully';
+                    //params.idCategory > 0 ? alert(msj+ ' updated'): alert(msj+' created');
+                    this.refreshList(data);
                 }
             }else{
                 alert('An error has occurred, try it later');
@@ -137,5 +136,4 @@ class CategoryDetail extends Component {
         );
     }
 }
-
-export default CategoryDetail;
+export default CategoryForm;

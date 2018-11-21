@@ -41,7 +41,6 @@ class HttpBase{
             let query = await this.callHttp(url, options);
             const data = await query.json();
             return data;
-
         } catch (error) {
             throw new Error(error)   
         }
