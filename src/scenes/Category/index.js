@@ -145,15 +145,19 @@ const styles = StyleSheet.create({
     },
     name:{
         color: '#6b6b6b',
-        fontSize: 14,
+        fontSize: 18,
         fontWeight: 'bold',
-        marginLeft: 10
+        marginLeft: 10,
+        fontFamily: "IndieFlower"
     },
     description:{
         color: '#6b6b6b',
-        fontSize: 12,
-        marginLeft: 10
+        fontSize: 14,
+        marginLeft: 10,
+        fontFamily: "IndieFlower"
+    },
+    text: {
+        fontFamily: "IndieFlower"
     }
 });
-
 export default Category;

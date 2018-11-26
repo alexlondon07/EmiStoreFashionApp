@@ -5,7 +5,7 @@ import Home from '../scenes/Home';
 import SideMenu from './side-menu';
 import CustomHeader from '../container/header';
 import Category from '../scenes/Category/index';
-import CategoryForm from '../scenes/CategoryForm';
+import CategoryForm from '../scenes/Category/components/category-form';
 
 const stackApp = createStackNavigator({
     HomeScreen:{  screen: Home },

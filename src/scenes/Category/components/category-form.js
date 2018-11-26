@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import {
     Alert,
+    StyleSheet
 } from "react-native";
 import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text} from 'native-base';
-import HttpCategory from "../../services/category/http-category";
-import CustomHeader from '../../container/header';
+import HttpCategory from "../../../services/category/http-category";
+import CustomHeader from "../../../container/header";
 
 class CategoryForm extends Component {
 
@@ -102,8 +103,9 @@ class CategoryForm extends Component {
             <Content>
                 <Form>
                     <Item floatingLabel>
-                        <Label>Category name</Label>
+                        <Label style={styles.text} >Category name</Label>
                         <Input
+                            style={styles.text}
                             autoCorrect={false}
                             autoCapitalize="none"
                             maxLength={45}
@@ -112,8 +114,9 @@ class CategoryForm extends Component {
                             value= {this.state.name} />
                     </Item>
                     <Item floatingLabel last>
-                        <Label>Category description</Label>
+                        <Label style={styles.text}>Category description</Label>
                         <Input
+                            style={styles.text}
                             autoCorrect={false}
                             autoCapitalize="none"
                             maxLength={90}
@@ -128,7 +131,7 @@ class CategoryForm extends Component {
                             }
                         }}>
                     <Icon name='ios-checkmark-circle' />
-                    <Text> { this.state.titleButton }</Text>
+                    <Text style={styles.text}> { this.state.titleButton }</Text>
                     </Button>
                 </Form>
             </Content>
@@ -136,4 +139,11 @@ class CategoryForm extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    text: {
+        fontSize: 18,
+        fontFamily: "IndieFlower"
+    }
+});
 export default CategoryForm;

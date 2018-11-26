@@ -16,6 +16,11 @@
     "redux": "^4.0.1",
     "redux-immutable": "^4.0.0"
   },
+    "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
   "devDependencies": {
     "babel-jest": "23.6.0",
     "babel-preset-react-native": "5.0.2",
