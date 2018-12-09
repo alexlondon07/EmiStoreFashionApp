@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
-import { ListView , Alert, StyleSheet, ActivityIndicator } from 'react-native';
+import { ListView , Alert, StyleSheet } from 'react-native';
 import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
 import HttpCategory from "./../../services/category/http-category";
 import CustomHeader from '../../container/header';
+import Loading from '../../container/components/loading';
 
 class Category extends Component{
 
@@ -44,7 +45,7 @@ class Category extends Component{
     }
 
     onResult = data => {
-        this.getDataCategories();
+        this.setState({ categoriesList: [...this.state.categoriesList, data ]})
     }
 
     infoItem(item){
@@ -52,9 +53,11 @@ class Category extends Component{
     }
 
     async deleteCategory(item, secId, rowId, rowMap){
+        this.setState({ loading: true });
         try {
             const data = await HttpCategory.deleteCategory(item.idCategory);
             if(data){
+                this.setState({ loading: false });
                 if(data.status == 200){          
                     //Removemos de la Lista el Item Eliminado
                     rowMap[`${secId}${rowId}`].props.closeRow();
@@ -85,15 +88,8 @@ class Category extends Component{
             <Container>
                 <Content>
                     { this.state.loading && 
-
-                            <View>
-                            <ActivityIndicator
-                            size="large"
-                            color="#0000ff"
-                            />
-                        </View>
+                        <Loading/>
                     }
-
                 <List
                     leftOpenValue={75}
                     rightOpenValue={-75}

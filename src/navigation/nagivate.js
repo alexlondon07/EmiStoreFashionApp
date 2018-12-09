@@ -6,10 +6,12 @@ import SideMenu from './side-menu';
 import CustomHeader from '../container/header';
 import Category from '../scenes/Category/index';
 import CategoryForm from '../scenes/Category/components/category-form';
+import Client from '../scenes/Client';
 
 const stackApp = createStackNavigator({
     HomeScreen:{  screen: Home },
     CategoryScreen:{  screen: Category },
+    ClientScreen: { screen: Client },
     CategoryFormScreen:{  screen: CategoryForm },
     CustomHeaderScreen:{  screen: CustomHeader },
 },{

@@ -6,6 +6,7 @@ import {
 import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text} from 'native-base';
 import HttpCategory from "../../../services/category/http-category";
 import CustomHeader from "../../../container/header";
+import Loading from "../../../container/components/loading";
 
 class CategoryForm extends Component {
 
@@ -19,7 +20,8 @@ class CategoryForm extends Component {
             errorMessage: null,
             isAddNew: true,
             titleButton: 'Create Category',
-            category: null
+            category: null,
+            loading: false
         };
     }   
 
@@ -45,7 +47,8 @@ class CategoryForm extends Component {
                 isAddNew: false,
                 idCategory: category.idCategory,
                 name: category.name,
-                description: category.description 
+                description: category.description,
+                loading: false 
             })
         }
     }
@@ -74,6 +77,7 @@ class CategoryForm extends Component {
 
     saveDataCategory = async () =>{
         try {
+            this.setState({ loading: true });
             const params = {
                 idCategory: this.state.idCategory,
                 name: this.state.name,
@@ -81,8 +85,9 @@ class CategoryForm extends Component {
                 enable: 'S'
             }
             const data =  params.idCategory > 0 ? await HttpCategory.updateHttpCategory(params): await HttpCategory.saveHttpCategories(params) ;
-            console.log(data);
+            //console.log(data);
             if(data){
+                this.setState({ loading: false });
                 if(data.errorMessage){
                     alert(data.errorMessage);
                 }else{
@@ -94,6 +99,7 @@ class CategoryForm extends Component {
                 alert('An error has occurred, try it later');
             }
         } catch (error) {
+            this.setState({ loading: false });
             console.log(error);
         }
     }
@@ -101,6 +107,9 @@ class CategoryForm extends Component {
         return (
         <Container>
             <Content>
+                { this.state.loading && 
+                    <Loading/>
+                }
                 <Form>
                     <Item floatingLabel>
                         <Label style={styles.text} >Category name</Label>

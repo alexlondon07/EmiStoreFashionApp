@@ -9,27 +9,27 @@ import { Container, Content, List, ListItem, Left, Icon, Text, Right } from 'nat
 const routes = [
     {
         screen: 'HomeScreen',
-        title: 'Inicio',
+        title: 'Home',
         icon: 'ios-home'
     },
     {
         screen: 'CategoryScreen',
-        title: 'Categorías',
+        title: 'Categories',
         icon: 'ios-list-box'
     },
     {
         screen: 'ClientScreen',
-        title: 'Clientes',
+        title: 'Clients',
         icon: 'ios-contacts'
     },
     {
         screen: 'ProductosScreen',
-        title: 'Productos',
+        title: 'Products',
         icon: 'ios-cube'
     },
     {
         screen: 'SettingsScreen',
-        title: 'Configuración',
+        title: 'Settings',
         icon: 'ios-settings'
     }
 ];
@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
         borderRadius: 50
     },
     textOption:{
-        fontSize: 12
+        fontSize: 18,
+        fontFamily: "IndieFlower"
     }
 });
 
