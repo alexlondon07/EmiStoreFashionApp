@@ -8,6 +8,7 @@ import HttpCategory from "../../../services/category/http-category";
 import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
 import FieldRequired from "../../../container/components/field-required";
+import ImageBackgroundComponent from "../../../container/components/image-background";
 
 class CategoryForm extends Component {
 
@@ -22,7 +23,8 @@ class CategoryForm extends Component {
             isAddNew: true,
             titleButton: 'Create Category',
             category: null,
-            loading: false
+            loading: false,
+            imageBackground: '../../../../assets/logo/photo_facebook.png'
         };
     }   
 
@@ -111,6 +113,7 @@ class CategoryForm extends Component {
                     <Loading/>
                 }
                 <Form>
+                    <ImageBackgroundComponent image = { this.state.imageBackground } />
                     <Item floatingLabel>
                         <Label style={styles.text} >Category name <FieldRequired/> </Label>
                         <Input

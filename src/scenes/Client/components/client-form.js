@@ -8,6 +8,7 @@ import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
 import HttpClient from "../../../services/client/http-client";
 import FieldRequired from "../../../container/components/field-required";
+import ImageBackgroundComponent from "../../../container/components/image-background";
 
 class ClientForm extends Component {
 
@@ -185,6 +186,7 @@ class ClientForm extends Component {
                     <Loading/>
                 }
                 <Form>
+                    <ImageBackgroundComponent/>
                     <Item floatingLabel>
                         <Label style={styles.text} >Client name <FieldRequired/> </Label>
                         <Input
