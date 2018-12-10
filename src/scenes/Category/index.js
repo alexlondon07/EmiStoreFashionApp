@@ -20,7 +20,7 @@ class Category extends Component{
             header: props => (
                 <CustomHeader
                     nameIcon = "ios-menu"
-                    title = { 'Category List' }
+                    title = { 'Category list' }
                     navigation = { navigation }
                     hasBackButtom= { true }
                     //hasBackButtom= { props.navigation.state.routes.length > 1 }
@@ -45,11 +45,12 @@ class Category extends Component{
     }
 
     onResult = data => {
-        this.setState({ categoriesList: [...this.state.categoriesList, data ]})
+        this.getDataCategories();
+        //this.setState({ categoriesList: [...this.state.categoriesList, data ]})
     }
 
     infoItem(item){
-        alert('Ide Category Nº ' + item.idCategory);
+        Alert.alert('Info Item','Ide Category Nº ' + item.idCategory);
     }
 
     async deleteCategory(item, secId, rowId, rowMap){

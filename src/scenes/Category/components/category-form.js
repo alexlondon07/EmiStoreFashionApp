@@ -7,6 +7,7 @@ import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text} from 
 import HttpCategory from "../../../services/category/http-category";
 import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
+import FieldRequired from "../../../container/components/field-required";
 
 class CategoryForm extends Component {
 
@@ -85,7 +86,6 @@ class CategoryForm extends Component {
                 enable: 'S'
             }
             const data =  params.idCategory > 0 ? await HttpCategory.updateHttpCategory(params): await HttpCategory.saveHttpCategories(params) ;
-            //console.log(data);
             if(data){
                 this.setState({ loading: false });
                 if(data.errorMessage){
@@ -112,7 +112,7 @@ class CategoryForm extends Component {
                 }
                 <Form>
                     <Item floatingLabel>
-                        <Label style={styles.text} >Category name</Label>
+                        <Label style={styles.text} >Category name <FieldRequired/> </Label>
                         <Input
                             style={styles.text}
                             autoCorrect={false}

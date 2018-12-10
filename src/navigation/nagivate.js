@@ -7,12 +7,14 @@ import CustomHeader from '../container/header';
 import Category from '../scenes/Category/index';
 import CategoryForm from '../scenes/Category/components/category-form';
 import Client from '../scenes/Client';
+import ClientForm from '../scenes/Client/components/client-form';
 
 const stackApp = createStackNavigator({
     HomeScreen:{  screen: Home },
     CategoryScreen:{  screen: Category },
     ClientScreen: { screen: Client },
     CategoryFormScreen:{  screen: CategoryForm },
+    ClientFormScreen:{  screen: ClientForm },
     CustomHeaderScreen:{  screen: CustomHeader },
 },{
     initialRouteName: 'HomeScreen',
