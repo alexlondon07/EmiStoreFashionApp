@@ -8,6 +8,8 @@ import Category from '../scenes/Category/index';
 import CategoryForm from '../scenes/Category/components/category-form';
 import Client from '../scenes/Client';
 import ClientForm from '../scenes/Client/components/client-form';
+import Product from '../scenes/Product';
+import ProductForm from '../scenes/Product/components/product-form';
 
 const stackApp = createStackNavigator({
     HomeScreen:{  screen: Home },
@@ -16,8 +18,10 @@ const stackApp = createStackNavigator({
     CategoryFormScreen:{  screen: CategoryForm },
     ClientFormScreen:{  screen: ClientForm },
     CustomHeaderScreen:{  screen: CustomHeader },
+    ProductScreen:{  screen: Product },
+    ProductFormScreen:{  screen: ProductForm },
 },{
-    initialRouteName: 'HomeScreen',
+    initialRouteName: 'ProductScreen',
 })
 
 const stackSettings = createStackNavigator({

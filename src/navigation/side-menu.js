@@ -23,7 +23,7 @@ const routes = [
         icon: 'ios-contacts'
     },
     {
-        screen: 'ProductosScreen',
+        screen: 'ProductScreen',
         title: 'Products',
         icon: 'ios-cube'
     },

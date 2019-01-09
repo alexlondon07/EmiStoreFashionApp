@@ -16,3 +16,12 @@ export const HTTP_CLIENT = {
     deleteClient: '/client/',
     updateClient: '/client/'
 }
+
+//  Product
+export const HTTP_PRODUCT = {
+    getProducts:    '/products',
+    saveProduct:    '/products',
+    deleteProduct:  '/product/',
+    updateProduct:  '/product/', 
+    getImage:       '/products/'
+}
