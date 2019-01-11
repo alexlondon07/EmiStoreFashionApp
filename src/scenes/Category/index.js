@@ -4,6 +4,7 @@ import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left
 import HttpCategory from "./../../services/category/http-category";
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
+import AddButton from '../../container/components/add-button';
 
 class Category extends Component{
 
@@ -31,6 +32,10 @@ class Category extends Component{
 
     componentDidMount = () =>{ 
         this.getDataCategories()
+    }
+
+    onPress(){
+        this.props.navigation.navigate('CategoryFormScreen',  { onResult: this.onResult } ) ;
     }
 
     deleteRow(item, secId, rowId, rowMap) {
@@ -120,15 +125,9 @@ class Category extends Component{
                 />
                 </Content>
                 <View>
-                <Fab
-                    active={this.state.active}
-                    direction="up"
-                    containerStyle={{ }}
-                    style={{ backgroundColor: '#5067FF' }}
-                    position="bottomRight"
-                    onPress = { ()=> this.props.navigation.navigate('CategoryFormScreen',  { onResult: this.onResult } ) } >
-                    <Icon name="ios-add" />
-                </Fab>
+                <AddButton
+                    onPress={()=>this.onPress()}
+                />
                 </View>
             </Container>
         )

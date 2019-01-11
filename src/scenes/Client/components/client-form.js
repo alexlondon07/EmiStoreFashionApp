@@ -215,6 +215,7 @@ class ClientForm extends Component {
                             autoCorrect={false}
                             autoCapitalize="none"
                             maxLength={90}
+                            keyboardType = 'numeric'
                             onChangeText={ (cellphone) => { this.setState({ cellphone })  } }
                             value= {this.state.cellphone} />
                     </Item>
@@ -224,6 +225,7 @@ class ClientForm extends Component {
                             style={styles.text}
                             autoCorrect={false}
                             autoCapitalize="none"
+                            keyboardType = "numeric"
                             maxLength={90}
                             onChangeText={ (identification) => { this.setState({ identification })  } }
                             value= {this.state.identification} />

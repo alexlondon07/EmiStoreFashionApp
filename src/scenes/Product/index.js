@@ -5,6 +5,7 @@ import { Text, Container, Thumbnail, Body, Button, Fab, View, Content, List, Lis
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
 import HttpProduct from '../../services/product/http-product';
+import AddButton from '../../container/components/add-button';
 
 
 class Product extends Component{
@@ -32,6 +33,10 @@ class Product extends Component{
 
     componentDidMount = () =>{ 
         this.getDataProducts()
+    }
+
+    onPress(){
+        this.props.navigation.navigate('ProductFormScreen',  { onResult: this.onResult } ) 
     }
 
     deleteRow(item, secId, rowId, rowMap) {
@@ -125,15 +130,9 @@ class Product extends Component{
                 />
                 </Content>
                 <View>
-                <Fab
-                    active={this.state.active}
-                    direction="up"
-                    containerStyle={{ }}
-                    style={{ backgroundColor: '#5067FF' }}
-                    position="bottomRight"
-                    onPress = { ()=> this.props.navigation.navigate('ProductFormScreen',  { onResult: this.onResult } ) } >
-                    <Icon name="ios-add" />
-                </Fab>
+                <AddButton
+                    onPress={()=>this.onPress()}
+                />
                 </View>
             </Container>
         )

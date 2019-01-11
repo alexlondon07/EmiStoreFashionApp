@@ -4,6 +4,7 @@ import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
 import HttpClient from '../../services/client/http-client';
+import AddButton from '../../container/components/add-button';
 
 class Client extends Component{
 
@@ -33,6 +34,10 @@ class Client extends Component{
         this.getDataClients()
     }
 
+    onPress(){
+        this.props.navigation.navigate('ClientFormScreen',  { onResult: this.onResult } ) 
+    }
+
     deleteRow(item, secId, rowId, rowMap) {
         Alert.alert(
             'Delete Item',
@@ -50,13 +55,13 @@ class Client extends Component{
     }
 
     infoItem(item){
-        Alert.alert('Info Item','Ide Client Nº ' + item.idClient);
+        Alert.alert('Info Item','Ide Client Nº ' + item.ideClient);
     }
 
     async deleteClient(item, secId, rowId, rowMap){
         this.setState({ loading: true });
         try {
-            const data = await HttpClient.deleteHttpClient(item.idClient);
+            const data = await HttpClient.deleteHttpClient(item.ideClient);
             if(data){
                 this.setState({ loading: false });
                 if(data.status == 200){          
@@ -83,7 +88,7 @@ class Client extends Component{
     }
 
     emptyComponent = () => <Text> Clients not found </Text>
-    keyExtractor = item => item.idClient.toString();
+    keyExtractor = item => item.ideClient.toString();
     render(){
         return (
             <Container>
@@ -120,15 +125,9 @@ class Client extends Component{
                 />
                 </Content>
                 <View>
-                <Fab
-                    active={this.state.active}
-                    direction="up"
-                    containerStyle={{ }}
-                    style={{ backgroundColor: '#5067FF' }}
-                    position="bottomRight"
-                    onPress = { ()=> this.props.navigation.navigate('ClientFormScreen',  { onResult: this.onResult } ) } >
-                    <Icon name="ios-add" />
-                </Fab>
+                <AddButton
+                    onPress={()=>this.onPress()}
+                />
                 </View>
             </Container>
         )
