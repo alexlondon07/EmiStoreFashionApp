@@ -16,7 +16,7 @@ class CategoryForm extends Component {
         super(props);
         this.state = {
             id: 0,
-            idCategory: 0,
+            ideCategory: 0,
             name: "",
             description: "",
             errorMessage: null,
@@ -44,11 +44,11 @@ class CategoryForm extends Component {
     
     componentDidMount = () =>{ 
         category = this.props.navigation.getParam('category', 'no-data');
-        if( category.idCategory > 0 ){
+        if( category.ideCategory > 0 ){
             this.setState({ 
                 titleButton: 'Edit Category',
                 isAddNew: false,
-                idCategory: category.idCategory,
+                ideCategory: category.ideCategory,
                 name: category.name,
                 description: category.description,
                 loading: false 
@@ -82,19 +82,19 @@ class CategoryForm extends Component {
         try {
             this.setState({ loading: true });
             const params = {
-                idCategory: this.state.idCategory,
+                ideCategory: this.state.ideCategory,
                 name: this.state.name,
                 description: this.state.description,
                 enable: 'S'
             }
-            const data =  params.idCategory > 0 ? await HttpCategory.updateHttpCategory(params): await HttpCategory.saveHttpCategories(params) ;
+            const data =  params.ideCategory > 0 ? await HttpCategory.updateHttpCategory(params): await HttpCategory.saveHttpCategories(params) ;
             if(data){
                 this.setState({ loading: false });
                 if(data.errorMessage){
                     alert(data.errorMessage);
                 }else{
                     //const msj = 'Category successfully';
-                    //params.idCategory > 0 ? alert(msj+ ' updated'): alert(msj+' created');
+                    //params.ideCategory > 0 ? alert(msj+ ' updated'): alert(msj+' created');
                     this.refreshList(data);
                 }
             }else{

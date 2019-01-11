@@ -50,13 +50,13 @@ class Category extends Component{
     }
 
     infoItem(item){
-        Alert.alert('Info Item','Ide Category Nº ' + item.idCategory);
+        Alert.alert('Info Item','Ide Category Nº ' + item.ideCategory);
     }
 
     async deleteCategory(item, secId, rowId, rowMap){
         this.setState({ loading: true });
         try {
-            const data = await HttpCategory.deleteCategory(item.idCategory);
+            const data = await HttpCategory.deleteCategory(item.ideCategory);
             if(data){
                 this.setState({ loading: false });
                 if(data.status == 200){          
@@ -83,7 +83,7 @@ class Category extends Component{
     }
 
     emptyComponent = () => <Text> Categories not found </Text>
-    keyExtractor = item => item.idCategory.toString();
+    keyExtractor = item => item.ideCategory.toString();
     render(){
         return (
             <Container>
