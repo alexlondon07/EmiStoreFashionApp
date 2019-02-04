@@ -107,15 +107,13 @@ class Product extends Component{
                             <ListItem avatar
                                 onPress = { ()=> this.props.navigation.navigate('ProductFormScreen',  { onResult: this.onResult, product: item } ) }>
                                 <Left>
-                                    <Thumbnail quare large source={{  uri: HttpProduct.getUrlImage(item.ideProduct) }} />
+                                    <Thumbnail quare large source={  item.image != null ? { uri: HttpProduct.getUrlImage(item.ideProduct) } :  require('../../../assets/products/empty.png')  } />
                                 </Left>
                                 <Body>
                                     <Text style={ styles.name }>{ item.name }</Text>
                                     <Text note>{ item.description }</Text>
+                                    <Text note style={ styles.category }>{ item.category.name !=null ? item.category.name: '' }</Text>
                                 </Body>
-                                <Right>
-                                    <Text note>{ item.category.name !=null ? item.category.name: '' }</Text>
-                                </Right>
                             </ListItem>
                         );
                     }}
@@ -153,6 +151,12 @@ const styles = StyleSheet.create({
     },
     text: {
         fontFamily: "IndieFlower"
+    },
+    category:{
+        color: '#5067FF',
+        fontSize: 15,
+        fontFamily: "IndieFlower",
+        fontWeight: 'bold'
     }
 });
 export default Product;

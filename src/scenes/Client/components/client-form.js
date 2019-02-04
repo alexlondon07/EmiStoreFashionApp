@@ -250,13 +250,13 @@ class ClientForm extends Component {
                             onChangeText={ (city) => { this.setState({ city })  } }
                             value= {this.state.city} />
                     </Item>
+                    <Label style={styles.text}></Label>
                     <Button full
                         onPress={() => {
                             if(this.validateForm()){
                                 this.saveData();
                             }
                         }}>
-                    <Icon name='ios-checkmark-circle' />
                     <Text style={styles.text}> { this.state.titleButton }</Text>
                     </Button>
                 </Form>

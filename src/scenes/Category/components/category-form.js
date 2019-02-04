@@ -136,14 +136,14 @@ class CategoryForm extends Component {
                             onChangeText={ (description) => { this.setState({ description })  } }
                             value= {this.state.description} />
                     </Item>
+                    <Label style={styles.text}></Label>
                     <Button full
                         onPress={() => {
                             if(this.validateForm()){
                                 this.saveDataCategory();
                             }
                         }}>
-                    <Icon name='ios-checkmark-circle' />
-                    <Text style={styles.text}> { this.state.titleButton }</Text>
+                        <Text style={styles.text}> { this.state.titleButton }</Text>
                     </Button>
                 </Form>
             </Content>
@@ -156,6 +156,14 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 18,
         fontFamily: "IndieFlower"
+    },
+    error:{
+        fontSize: 14,
+        fontFamily: "IndieFlower",
+        color: 'red',
+        alignContent: 'center',
+        alignItems: 'center',
+
     }
 });
 export default CategoryForm;

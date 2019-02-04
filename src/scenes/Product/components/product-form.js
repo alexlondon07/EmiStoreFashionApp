@@ -4,6 +4,8 @@ import {
     StyleSheet
 } from "react-native";
 import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text, Picker} from 'native-base';
+
+import HttpCategory from "./../../../services/category/http-category";
 import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
 import HttpProduct from "../../../services/product/http-product";
@@ -27,7 +29,9 @@ class ProductForm extends Component {
             titleButton: 'Create Product',
             product: null,
             loading: false,
-            selected2: undefined
+            selected2: undefined, 
+            dataCategories: null,
+            pickerList: null,
         };
     }   
 
@@ -52,6 +56,10 @@ class ProductForm extends Component {
     }
     
     componentDidMount = () =>{ 
+
+        //Get Categories
+        this.getDataCategories();
+
         product = this.props.navigation.getParam('product', 'no-data');
         if( product.ideProduct > 0 ){
             this.setState({ 
@@ -65,8 +73,20 @@ class ProductForm extends Component {
                 image: product.image,
                 address: product.address,
                 city: product.city,
+                selected2: product.category.ideCategory.toString(),
                 loading: false 
-            })
+            });
+        }
+    }
+
+    async getDataCategories(){
+        const data = await HttpCategory.getHttpCategories();
+        let items = [];
+        if(data){
+            { data.map((row) => {
+                items.push(<Picker.Item label={ row.name } key ={ row.ideCategory.toString() } value={ row.ideCategory.toString() }/>);
+            })}
+            this.setState({ dataCategories: data, pickerList: items })
         }
     }
 
@@ -77,6 +97,11 @@ class ProductForm extends Component {
     }
 
     validateForm(){
+        //IdeCategory
+        if ( this.state.selected2 == undefined ) {
+            Alert.alert("Category field is requited")
+            return false;
+        }
         //Name
         if (this.state.name.trim() == "") {
             Alert.alert("Please enter product name")
@@ -141,11 +166,10 @@ class ProductForm extends Component {
                 description: this.state.description,
                 cost: this.state.cost,
                 price: this.state.price,
-                enable: 'S'
+                enable: 'S',
+                ideCategory: this.state.selected2
             }
-            console.log('params', params);
             const data =  params.ideProduct > 0 ? await HttpProduct.updateHttpProduct(params): await HttpProduct.saveHttpProduct(params) ;
-            console.log('data', data);
             if(data){
                 this.setState({ loading: false });
                 if(data.errorMessage){
@@ -176,14 +200,9 @@ class ProductForm extends Component {
                             iosIcon={<Icon name="ios-arrow-down-outline" />}
                             placeholder="Select Category"
                             placeholderStyle={styles.text}
-                            selectedValue={this.state.selected2}
-                            onValueChange={this.onValueChange2.bind(this)}
-                        >
-                            <Picker.Item label="Wallet" value="key0" />
-                            <Picker.Item label="ATM Card" value="key1" />
-                            <Picker.Item label="Debit Card" value="key2" />
-                            <Picker.Item label="Credit Card" value="key3" />
-                            <Picker.Item label="Net Banking" value="key4" />
+                            selectedValue={ this.state.selected2 }
+                            onValueChange={ this.onValueChange2.bind(this) }  >
+                            {this.state.pickerList}
                         </Picker>
                     </Item>
                     <Item floatingLabel>
@@ -229,13 +248,13 @@ class ProductForm extends Component {
                             onChangeText={ (price) => { this.setState({ price })  } }
                             value= {this.state.price} />
                     </Item>
+                    <Label style={styles.text}></Label>
                     <Button full
                         onPress={() => {
                             if(this.validateForm()){
                                 this.saveData();
                             }
                         }}>
-                    <Icon name='ios-checkmark-circle' />
                     <Text style={styles.text}> { this.state.titleButton }</Text>
                     </Button>
                 </Form>
