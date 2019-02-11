@@ -39,7 +39,7 @@ class HttpProduct {
 
     async updateHttpProduct(params){
         try {
-            const url  = `${ BASE_API }${ HTTP_PRODUCT.updateProduct }${ params.idProduct }`
+            const url  = `${ BASE_API }${ HTTP_PRODUCT.updateProduct }${ params.ideProduct }`
             const config = {
                 header: {},
                 params

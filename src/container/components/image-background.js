@@ -7,7 +7,7 @@ import HttpProduct from '../../services/product/http-product';
 const ImageBackgroundComponent = props => {
     return(
         <ImageBackground
-        source={  props.item > 0 ? { uri: HttpProduct.getUrlImage(props.item) } :  require('../../../assets/clients.png')  }
+        source={  props.image == null || props.image == ""  ? require('../../../assets/background.png') : { uri: HttpProduct.getUrlImage(props.id) }  }
         style = { styles.imageBackground }>
         </ImageBackground>
     )

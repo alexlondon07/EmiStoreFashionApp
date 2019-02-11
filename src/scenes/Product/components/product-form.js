@@ -149,42 +149,44 @@ class ProductForm extends Component {
             Alert.alert("The price field, value is not number");
             return false;
         }
-        if( this.state.cost.trim() > this.state.price.trim() ){
-            Alert.alert("The cost field, not can´t be greater than the price");
-            return false;
-        }
-
         return true;
     }
 
     saveData = async () =>{
         try {
-            this.setState({ loading: true });
+            this.loading(true);
             const params = {
+                category: {
+                    ideCategory: this.state.selected2
+                },
                 ideProduct: this.state.ideProduct,
                 name: this.state.name,
                 description: this.state.description,
                 cost: this.state.cost,
                 price: this.state.price,
-                enable: 'S',
-                ideCategory: this.state.selected2
+                image: null,
+                enable: 'S'
             }
             const data =  params.ideProduct > 0 ? await HttpProduct.updateHttpProduct(params): await HttpProduct.saveHttpProduct(params) ;
             if(data){
-                this.setState({ loading: false });
+                this.loading(false);
                 if(data.errorMessage){
                     alert(data.errorMessage);
                 }else{
                     this.refreshList(data);
                 }
-            }else{
-                alert('An error has occurred, try it later');
             }
         } catch (error) {
-            this.setState({ loading: false });
+            this.loading(false);
+            alert('An error has occurred, try it later');
             console.log(error);
         }
     }
+
+    loading( load ){
+        this.setState({ loading: load });
+    }
+
     render() {
         return (
         <Container>
@@ -193,7 +195,7 @@ class ProductForm extends Component {
                     <Loading/>
                 }
                 <Form>
-                    <ImageBackgroundComponent item = { this.state.ideProduct } />
+                    <ImageBackgroundComponent id = { this.state.ideProduct } image = { this.state.image } />
                     <Item picker>
                         <Picker
                             mode="dropdown"
@@ -233,7 +235,8 @@ class ProductForm extends Component {
                             autoCorrect={false}
                             autoCapitalize="none"
                             maxLength={30}
-                            keyboardType = 'numeric'
+                            keyboardType="numeric"
+                            onChange={this.onChange}
                             onChangeText={ (cost) => { this.setState({ cost })  } }
                             value= {this.state.cost} />
                     </Item>
@@ -244,7 +247,7 @@ class ProductForm extends Component {
                             autoCorrect={false}
                             autoCapitalize="none"
                             maxLength={30}
-                            keyboardType = 'numeric'
+                            keyboardType="numeric"
                             onChangeText={ (price) => { this.setState({ price })  } }
                             value= {this.state.price} />
                     </Item>

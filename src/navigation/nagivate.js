@@ -21,7 +21,7 @@ const stackApp = createStackNavigator({
     ProductScreen:{  screen: Product },
     ProductFormScreen:{  screen: ProductForm },
 },{
-    initialRouteName: 'HomeScreen',
+    initialRouteName: 'ProductScreen',
 })
 
 const stackSettings = createStackNavigator({

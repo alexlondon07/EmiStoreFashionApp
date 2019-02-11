@@ -113,7 +113,7 @@ class CategoryForm extends Component {
                     <Loading/>
                 }
                 <Form>
-                    <ImageBackgroundComponent image = { this.state.imageBackground } />
+                    <ImageBackgroundComponent />
                     <Item floatingLabel>
                         <Label style={styles.text} >Category name <FieldRequired/> </Label>
                         <Input

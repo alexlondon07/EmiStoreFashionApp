@@ -107,10 +107,10 @@ class Product extends Component{
                             <ListItem avatar
                                 onPress = { ()=> this.props.navigation.navigate('ProductFormScreen',  { onResult: this.onResult, product: item } ) }>
                                 <Left>
-                                    <Thumbnail quare large source={  item.image != null ? { uri: HttpProduct.getUrlImage(item.ideProduct) } :  require('../../../assets/products/empty.png')  } />
+                                    <Thumbnail quare large source={  item.image == null ? require('../../../assets/products/empty.png') : { uri: HttpProduct.getUrlImage(item.ideProduct) } } />
                                 </Left>
                                 <Body>
-                                    <Text style={ styles.name }>{ item.name }</Text>
+                                    <Text style={ styles.name }>{ item.ideProduct } { item.name }</Text>
                                     <Text note>{ item.description }</Text>
                                     <Text note style={ styles.category }>{ item.category.name !=null ? item.category.name: '' }</Text>
                                 </Body>
