@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         borderColor: 'red',
     },
     name:{
-        color: '#6b6b6b',
+        color: '#5067FF',
         fontSize: 18,
         fontWeight: 'bold',
         marginLeft: 10,

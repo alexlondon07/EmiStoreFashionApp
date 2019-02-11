@@ -140,8 +140,8 @@ const styles = StyleSheet.create({
         borderColor: 'red',
     },
     name:{
-        color: '#6b6b6b',
-        fontSize: 18,
+        color: '#5067FF',
+        fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 10,
         fontFamily: "IndieFlower"

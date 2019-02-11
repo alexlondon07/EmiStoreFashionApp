@@ -39,7 +39,7 @@ class HttpCategory {
 
     async updateHttpCategory(params){
         try {
-            const url  = `${ BASE_API }${ HTTP_CATEGORY.updateCategory }${ params.idCategory }`
+            const url  = `${ BASE_API }${ HTTP_CATEGORY.updateCategory }${ params.ideCategory }`
             const config = {
                 header: {},
                 params

@@ -102,6 +102,7 @@ class CategoryForm extends Component {
             }
         } catch (error) {
             this.setState({ loading: false });
+            alert('An error has occurred, try it later');
             console.log(error);
         }
     }

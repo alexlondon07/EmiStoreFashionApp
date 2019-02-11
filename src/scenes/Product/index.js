@@ -110,7 +110,7 @@ class Product extends Component{
                                     <Thumbnail quare large source={  item.image == null ? require('../../../assets/products/empty.png') : { uri: HttpProduct.getUrlImage(item.ideProduct) } } />
                                 </Left>
                                 <Body>
-                                    <Text style={ styles.name }>{ item.ideProduct } { item.name }</Text>
+                                    <Text style={ styles.category }>{ item.ideProduct } { item.name }</Text>
                                     <Text note>{ item.description }</Text>
                                     <Text note style={ styles.category }>{ item.category.name !=null ? item.category.name: '' }</Text>
                                 </Body>
