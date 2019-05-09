@@ -3,12 +3,16 @@ import {
     Alert,
     StyleSheet
 } from "react-native";
-import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text} from 'native-base';
-import HttpCategory from "../../../services/category/http-category";
+import axios from 'axios';
+import { Button,  Label, Container, Content, Form, Item, Input, Text} from 'native-base';
 import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
 import FieldRequired from "../../../container/components/field-required";
 import ImageBackgroundComponent from "../../../container/components/image-background";
+import { MESSAGES } from "../../../util/constants";
+import { BASE_API, HTTP_CATEGORY } from "../../../services/config";
+import { Keyboard } from 'react-native'
+
 
 class CategoryForm extends Component {
 
@@ -78,33 +82,36 @@ class CategoryForm extends Component {
         return true;
     }
 
+    /**
+     * Method to save or update category
+     */
     saveDataCategory = async () =>{
-        try {
-            this.setState({ loading: true });
-            const params = {
+        this.setState({ loading: true });
+        const update  = this.state.ideCategory > 0 ? 'PATCH' : 'POST';
+        const request = update === 'PATCH' ? `${ BASE_API }${ HTTP_CATEGORY.updateCategory }${ this.state.ideCategory }` : `${ BASE_API }${ HTTP_CATEGORY.saveCategory }`;            
+
+        // Send request
+        axios({
+            method: update,
+            url: request,
+            data: {
                 ideCategory: this.state.ideCategory,
                 name: this.state.name,
                 description: this.state.description,
                 enable: 'S'
             }
-            const data =  params.ideCategory > 0 ? await HttpCategory.updateHttpCategory(params): await HttpCategory.saveHttpCategories(params) ;
-            if(data){
-                this.setState({ loading: false });
-                if(data.errorMessage){
-                    alert(data.errorMessage);
-                }else{
-                    //const msj = 'Category successfully';
-                    //params.ideCategory > 0 ? alert(msj+ ' updated'): alert(msj+' created');
-                    this.refreshList(data);
-                }
-            }else{
-                alert('An error has occurred, try it later');
-            }
-        } catch (error) {
+        }).then(response => {
             this.setState({ loading: false });
-            alert('An error has occurred, try it later');
+            if(response.data.errorMessage){
+                alert(response.data.errorMessage);
+            }else{
+                this.refreshList(response.data);
+            }
+        }).catch(error => {
             console.log(error);
-        }
+            alert( MESSAGES.error );
+        });
+
     }
     render() {
         return (

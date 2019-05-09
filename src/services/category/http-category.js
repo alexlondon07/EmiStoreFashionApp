@@ -1,16 +1,17 @@
 import { BASE_API, HTTP_CATEGORY } from './../config';
 import httpBase from '../http-base';
+import axios from 'axios';
 
 class HttpCategory {
 
     async getHttpCategories(){
-        try {
-            const url  = `${ BASE_API }${ HTTP_CATEGORY.getCategories }`
-            const data = await httpBase.baseGet(url, {});
-            return data;
-        } catch (error) {
+        axios.get(`${ BASE_API }${ HTTP_CATEGORY.getCategories }`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
             console.log(error);
-        }
+        });
     }
 
     async deleteCategory(id){

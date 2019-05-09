@@ -1,10 +1,12 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import { ListView , Alert, StyleSheet } from 'react-native';
 import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
 import HttpCategory from "./../../services/category/http-category";
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
 import AddButton from '../../container/components/add-button';
+import axios from 'axios';
+import { BASE_API, HTTP_CATEGORY } from '../../services/config';
 
 class Category extends Component{
 
@@ -80,11 +82,17 @@ class Category extends Component{
         }
     }
 
+    /**
+     * Method to get all categories from DataBase
+     */
     async getDataCategories(){
-        const data = await HttpCategory.getHttpCategories();
-        if(data){
-            this.setState({ categoriesList: data, loading: false })
-        }
+        axios.get(`${ BASE_API }${ HTTP_CATEGORY.getCategories }`)
+        .then(response => {
+            this.setState({ categoriesList: response.data, loading: false })
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     emptyComponent = () => <Text> Categories not found </Text>
