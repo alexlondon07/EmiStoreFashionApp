@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import { ListView , Alert, StyleSheet } from 'react-native';
-import { Text, Container, Thumbnail, Body, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
+import { Text, Container, Thumbnail, Body, Button, Fab, View, Content, List, ListItem, Icon, Left , Right, Item} from 'native-base';
+import axios from 'axios'
 
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
-import HttpProduct from '../../services/product/http-product';
 import AddButton from '../../container/components/add-button';
-
+import { BASE_API, HTTP_PRODUCT } from '../../services/config';
 
 class Product extends Component{
 
@@ -60,32 +60,52 @@ class Product extends Component{
     }
 
     async deleteProduct(item, secId, rowId, rowMap){
-        this.setState({ loading: true });
-        try {
-            const data = await HttpProduct.deleteHttpProduct(item.ideProduct);
-            if(data){
-                this.setState({ loading: false });
-                if(data.status == 200){          
-                    //Removemos de la Lista el Item Eliminado
-                    rowMap[`${secId}${rowId}`].props.closeRow();
-                    const newData = [...this.state.productsList];
-                    newData.splice(rowId, 1);
-                    this.setState({ productsList: newData });
-                }else{
-                    alert('Cannot delete item');
-                }
+        loadingActivityIndicator(true);
+
+        axios({
+            method: 'DELETE',
+            url: `${ BASE_API }${ HTTP_PRODUCT.deleteProduct }${ item.ideCategory }`,
+        }).then(response => {
+            
+            loadingActivityIndicator(false);
+            if(response.status == 200){          
+                //Removemos de la Lista el Item Eliminado
+                rowMap[`${secId}${rowId}`].props.closeRow();
+                const newData = [...this.state.productsList];
+                newData.splice(rowId, 1);
+                this.setState({ productsList: newData });
+            }else{
+                loadingActivityIndicator(false);
+                alert('Cannot delete item');
             }
-        } catch (error) {
-            console.log(error);
-            alert('An error has occurred, try it later');
-        }
+            
+        }).catch(error => {
+            loadingActivityIndicator(false);
+            alert('Cannot delete item, An error has occurred, try it later');
+        });
     }
 
+    /**
+     * Method to active or inactive the Activity Indicator
+     * @param {*} enable 
+     */
+    loadingActivityIndicator(enable){
+        this.setState({ loading: enable });
+    }
+
+    /**
+     * Method to get all products from DataBase
+     */
     async getDataProducts(){
-        const data = await HttpProduct.getHttpProducts();
-        if(data){
-            this.setState({ productsList: data, loading: false })
-        }
+        axios.get(`${ BASE_API }${ HTTP_PRODUCT.getProducts }`)
+        .then( response =>{
+            this.setState({ productsList: response.data, loading: false })
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState({ loading: false })
+            alert('Error to get all products list');
+        });
     }
 
     emptyComponent = () => <Text> Products not found </Text>
@@ -107,7 +127,7 @@ class Product extends Component{
                             <ListItem avatar
                                 onPress = { ()=> this.props.navigation.navigate('ProductFormScreen',  { onResult: this.onResult, product: item } ) }>
                                 <Left>
-                                    <Thumbnail quare large source={  item.image == null ? require('../../../assets/products/empty.png') : { uri: HttpProduct.getUrlImage(item.ideProduct) } } />
+                                    <Thumbnail quare large source={  item.image == null ? require('../../../assets/products/empty.png') : { uri: `${ BASE_API }${ HTTP_PRODUCT.getImage }${ item.ideProduct }${ '/images' }` } } />
                                 </Left>
                                 <Body>
                                     <Text style={ styles.category }>{ item.ideProduct } { item.name }</Text>

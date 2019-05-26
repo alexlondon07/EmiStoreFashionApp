@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { ListView , Alert, StyleSheet } from 'react-native';
 import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
-import HttpCategory from "./../../services/category/http-category";
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
 import AddButton from '../../container/components/add-button';
@@ -61,25 +60,36 @@ class Category extends Component{
     }
 
     async deleteCategory(item, secId, rowId, rowMap){
-        this.setState({ loading: true });
-        try {
-            const data = await HttpCategory.deleteCategory(item.ideCategory);
-            if(data){
-                this.setState({ loading: false });
-                if(data.status == 200){          
-                    //Removemos de la Lista el Item Eliminado
-                    rowMap[`${secId}${rowId}`].props.closeRow();
-                    const newData = [...this.state.categoriesList];
-                    newData.splice(rowId, 1);
-                    this.setState({ categoriesList: newData });
-                }else{
-                    alert('Cannot delete item');
-                }
+        loadingActivityIndicator(true);
+        axios({
+            method: 'DELETE',
+            url: `${ BASE_API }${ HTTP_CATEGORY.deleteCategory }${ item.ideCategory }`,
+        }).then(response => {
+            
+            loadingActivityIndicator(false);
+            if(response.status == 200){          
+                //Removemos de la Lista el Item Eliminado
+                rowMap[`${secId}${rowId}`].props.closeRow();
+                const newData = [...this.state.categoriesList];
+                newData.splice(rowId, 1);
+                this.setState({ categoriesList: newData });
+            }else{
+                loadingActivityIndicator(false);
+                alert('Cannot delete item');
             }
-        } catch (error) {
-            console.log(error);
-            alert('An error has occurred, try it later');
-        }
+            
+        }).catch(error => {
+            loadingActivityIndicator(false);
+            alert('Cannot delete item, An error has occurred, try it later');
+        });
+    }
+
+    /**
+     * Method to active or inactive the Activity Indicator
+     * @param {*} enable 
+     */
+    loadingActivityIndicator(enable){
+        this.setState({ loading: enable });
     }
 
     /**
@@ -92,6 +102,8 @@ class Category extends Component{
         })
         .catch(error => {
             console.log(error);
+            this.setState({ loading: true })
+            alert('Error to get all categories list');
         });
     }
 

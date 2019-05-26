@@ -4,13 +4,13 @@ import {
     StyleSheet
 } from "react-native";
 import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text, Picker} from 'native-base';
-
-import HttpCategory from "./../../../services/category/http-category";
+import axios from 'axios';
 import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
-import HttpProduct from "../../../services/product/http-product";
 import FieldRequired from "../../../container/components/field-required";
 import ImageBackgroundComponent from "../../../container/components/image-background";
+import { BASE_API, HTTP_CATEGORY, HTTP_PRODUCT } from "../../../services/config";
+import { MESSAGES } from "../../../util/constants";
 
 class ProductForm extends Component {
 
@@ -79,15 +79,18 @@ class ProductForm extends Component {
         }
     }
 
-    async getDataCategories(){
-        const data = await HttpCategory.getHttpCategories();
+    getDataCategories(){
         let items = [];
-        if(data){
-            { data.map((row) => {
+        axios.get(`${ BASE_API }${ HTTP_CATEGORY.getCategories }`)
+        .then(response => {
+            { response.data.map((row) => {
                 items.push(<Picker.Item label={ row.name } key ={ row.ideCategory.toString() } value={ row.ideCategory.toString() }/>);
             })}
-            this.setState({ dataCategories: data, pickerList: items })
-        }
+            this.setState({ dataCategories: response.data, pickerList: items })
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     async refreshList (data) {
@@ -116,7 +119,7 @@ class ProductForm extends Component {
             return false;
         }
 
-        //description
+        //Description
         if (this.state.description.trim() == "") {
             Alert.alert("Please enter product last name")
             return false;
@@ -130,7 +133,7 @@ class ProductForm extends Component {
             return false;
         }
         
-        //cost
+        //Cost
         if (this.state.cost.trim() == "") {
             Alert.alert("Please enter cost")
             return false;
@@ -140,7 +143,7 @@ class ProductForm extends Component {
             return false;
         }
 
-        //price
+        //Price
         if (this.state.price.trim() =="") {
             Alert.alert("Please enter price")
             return false;
@@ -152,10 +155,19 @@ class ProductForm extends Component {
         return true;
     }
 
-    saveData = async () =>{
-        try {
-            this.loading(true);
-            const params = {
+    /**
+     * Method to save or update product
+     */
+    saveDataProduct = async () =>{
+        this.loading(true);
+        const method  = this.state.ideProduct > 0 ? 'PATCH' : 'POST';
+        const request = method === 'PATCH' ? `${ BASE_API }${ HTTP_PRODUCT.updateProduct }${ this.state.ideProduct }` : `${ BASE_API }${ HTTP_PRODUCT.saveProduct }`;            
+        
+        //Send request
+        axios({
+            method,
+            url: request,
+            data: {
                 category: {
                     ideCategory: this.state.selected2
                 },
@@ -167,20 +179,18 @@ class ProductForm extends Component {
                 image: null,
                 enable: 'S'
             }
-            const data =  params.ideProduct > 0 ? await HttpProduct.updateHttpProduct(params): await HttpProduct.saveHttpProduct(params) ;
-            if(data){
-                this.loading(false);
-                if(data.errorMessage){
-                    alert(data.errorMessage);
-                }else{
-                    this.refreshList(data);
-                }
-            }
-        } catch (error) {
+        }).then(response => {
             this.loading(false);
-            alert('An error has occurred, try it later');
+            if(response.data.errorMessage){
+                alert(response.data.errorMessage);
+            }else{
+                this.refreshList(response.data);
+            }
+        }).catch(error => {
+            this.loading(false);
             console.log(error);
-        }
+            alert( MESSAGES.error );
+        });
     }
 
     loading( load ){
@@ -255,7 +265,7 @@ class ProductForm extends Component {
                     <Button full
                         onPress={() => {
                             if(this.validateForm()){
-                                this.saveData();
+                                this.saveDataProduct();
                             }
                         }}>
                     <Text style={styles.text}> { this.state.titleButton }</Text>

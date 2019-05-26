@@ -11,8 +11,6 @@ import FieldRequired from "../../../container/components/field-required";
 import ImageBackgroundComponent from "../../../container/components/image-background";
 import { MESSAGES } from "../../../util/constants";
 import { BASE_API, HTTP_CATEGORY } from "../../../services/config";
-import { Keyboard } from 'react-native'
-
 
 class CategoryForm extends Component {
 
@@ -66,6 +64,9 @@ class CategoryForm extends Component {
         navigation.state.params.onResult(data);
     }
 
+    /**
+     * Method to validate all fields
+     */
     validateForm(){
         if (this.state.name.trim() == "") {
             Alert.alert("Please enter category name")
@@ -87,12 +88,12 @@ class CategoryForm extends Component {
      */
     saveDataCategory = async () =>{
         this.setState({ loading: true });
-        const update  = this.state.ideCategory > 0 ? 'PATCH' : 'POST';
-        const request = update === 'PATCH' ? `${ BASE_API }${ HTTP_CATEGORY.updateCategory }${ this.state.ideCategory }` : `${ BASE_API }${ HTTP_CATEGORY.saveCategory }`;            
+        const method  = this.state.ideCategory > 0 ? 'PATCH' : 'POST';
+        const request = method === 'PATCH' ? `${ BASE_API }${ HTTP_CATEGORY.updateCategory }${ this.state.ideCategory }` : `${ BASE_API }${ HTTP_CATEGORY.saveCategory }`;            
 
         // Send request
         axios({
-            method: update,
+            method,
             url: request,
             data: {
                 ideCategory: this.state.ideCategory,
@@ -111,8 +112,8 @@ class CategoryForm extends Component {
             console.log(error);
             alert( MESSAGES.error );
         });
-
     }
+
     render() {
         return (
         <Container>

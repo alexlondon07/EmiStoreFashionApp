@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Container, Header, Title, Content, Footer, Card, CardItem, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import { Container,Content, Footer, Card, CardItem, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 import CustomHeader from '../../container/header';
 
 class Home extends Component {
