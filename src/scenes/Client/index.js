@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import { ListView , Alert, StyleSheet } from 'react-native';
-import { Text, Container, Button, Fab, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
+import { Text, Container, Button, View, Content, List, ListItem, Icon, Left , Right} from 'native-base';
+import axios from 'axios';
 import CustomHeader from '../../container/header';
 import Loading from '../../container/components/loading';
-import HttpClient from '../../services/client/http-client';
 import AddButton from '../../container/components/add-button';
+import { HTTP_CLIENT, BASE_API } from '../../services/config';
 
 class Client extends Component{
 
@@ -59,32 +60,49 @@ class Client extends Component{
     }
 
     async deleteClient(item, secId, rowId, rowMap){
-        this.setState({ loading: true });
-        try {
-            const data = await HttpClient.deleteHttpClient(item.ideClient);
-            if(data){
-                this.setState({ loading: false });
-                if(data.status == 200){          
-                    //Removemos de la Lista el Item Eliminado
-                    rowMap[`${secId}${rowId}`].props.closeRow();
-                    const newData = [...this.state.clientsList];
-                    newData.splice(rowId, 1);
-                    this.setState({ clientsList: newData });
-                }else{
-                    alert('Cannot delete item');
-                }
+        this.loadingActivityIndicator(true);
+
+        axios({
+            method: 'DELETE',
+            url: `${ BASE_API }${ HTTP_CLIENT.deleteClient }${ item.ideClient }`,
+        }).then(response => {
+            
+            this.loadingActivityIndicator(false);
+            if(response.status == 200){          
+                //Removemos de la Lista el Item Eliminado
+                rowMap[`${secId}${rowId}`].props.closeRow();
+                const newData = [...this.state.clientsList];
+                newData.splice(rowId, 1);
+                this.setState({ clientsList: newData });
+            }else{
+                this.loadingActivityIndicator(false);
+                alert('Cannot delete item');
             }
-        } catch (error) {
-            console.log(error);
-            alert('An error has occurred, try it later');
-        }
+            
+        }).catch(error => {
+            loadingActivityIndicator(false);
+            alert('Cannot delete item, An error has occurred, try it later');
+        });
     }
 
+    /**
+     * Method to active or inactive the Activity Indicator
+     * @param {*} enable 
+     */
+    loadingActivityIndicator(enable){
+        this.setState({ loading: enable });
+    }
+    
     async getDataClients(){
-        const data = await HttpClient.getHttpClients();
-        if(data){
-            this.setState({ clientsList: data, loading: false })
-        }
+        axios.get(`${ BASE_API }${ HTTP_CLIENT.getClients }`)
+        .then(response => {
+            this.setState({ clientsList: response.data, loading: false })
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState({ loading: true })
+            alert('Error to get all clients list');
+        });
     }
 
     emptyComponent = () => <Text> Clients not found </Text>

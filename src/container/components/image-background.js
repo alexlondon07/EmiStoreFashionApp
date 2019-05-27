@@ -2,12 +2,12 @@ import React from 'react';
 import {
     ImageBackground, StyleSheet
 } from "react-native";
-import HttpProduct from '../../services/product/http-product';
+import { BASE_API, HTTP_PRODUCT } from '../../services/config';
 
 const ImageBackgroundComponent = props => {
     return(
         <ImageBackground
-        source={  props.image == null || props.image == ""  ? require('../../../assets/background.png') : { uri: HttpProduct.getUrlImage(props.id) }  }
+        source={  props.image == null || props.image == ""  ? require('../../../assets/clients.png') : { uri: `${ BASE_API }${ HTTP_PRODUCT.getImage }${ props.id }${ '/images' }` }  }
         style = { styles.imageBackground }>
         </ImageBackground>
     )

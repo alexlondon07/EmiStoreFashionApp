@@ -3,7 +3,7 @@ import {
     Alert,
     StyleSheet
 } from "react-native";
-import {Icon, Button,  Label, Container, Content, Form, Item, Input, Text, Picker} from 'native-base';
+import {Icon, Toast, Button,  Label, Container, Content, Form, Item, Input, Text, Picker} from 'native-base';
 import axios from 'axios';
 import CustomHeader from "../../../container/header";
 import Loading from "../../../container/components/loading";
@@ -159,6 +159,7 @@ class ProductForm extends Component {
      * Method to save or update product
      */
     saveDataProduct = async () =>{
+
         this.loading(true);
         const method  = this.state.ideProduct > 0 ? 'PATCH' : 'POST';
         const request = method === 'PATCH' ? `${ BASE_API }${ HTTP_PRODUCT.updateProduct }${ this.state.ideProduct }` : `${ BASE_API }${ HTTP_PRODUCT.saveProduct }`;            
@@ -200,13 +201,13 @@ class ProductForm extends Component {
     render() {
         return (
         <Container>
-            <Content>
+            <Content padder>
                 { this.state.loading && 
                     <Loading/>
                 }
                 <Form>
-                    <ImageBackgroundComponent id = { this.state.ideProduct } image = { this.state.image } />
-                    <Item picker>
+                    <ImageBackgroundComponent id = { this.state.ideProduct } image = '../../../assets/background.png' />
+                    <Item>
                         <Picker
                             mode="dropdown"
                             iosIcon={<Icon name="ios-arrow-down-outline" />}
@@ -215,7 +216,7 @@ class ProductForm extends Component {
                             selectedValue={ this.state.selected2 }
                             onValueChange={ this.onValueChange2.bind(this) }  >
                             {this.state.pickerList}
-                        </Picker>
+                        </Picker><FieldRequired/>
                     </Item>
                     <Item floatingLabel>
                         <Label style={styles.text} >Product name <FieldRequired/> </Label>
@@ -227,41 +228,40 @@ class ProductForm extends Component {
                             onChangeText={ (name) => { this.setState({ name })  } }
                             value= {this.state.name} />
                     </Item>
-                    <Item floatingLabel last>
+                    <Item floatingLabel>
                         <Label style={styles.text}>Product description <FieldRequired/> </Label>
                         <Input
                             style={styles.text}
                             autoCorrect={false}
                             autoCapitalize="none"
-                            maxLength={200}
+                            maxLength={155}
                             multiline = {true}
                             onChangeText={ (description) => { this.setState({ description })  } }
                             value= {this.state.description} />
                     </Item>
-                    <Item floatingLabel last>
+                    <Item floatingLabel>
                         <Label style={styles.text}>Product cost <FieldRequired/> </Label>
                         <Input
                             style={styles.text}
                             autoCorrect={false}
                             autoCapitalize="none"
-                            maxLength={30}
+                            maxLength={6}
                             keyboardType="numeric"
                             onChange={this.onChange}
                             onChangeText={ (cost) => { this.setState({ cost })  } }
                             value= {this.state.cost} />
                     </Item>
                     <Item floatingLabel last>
-                        <Label style={styles.text}>Product price</Label>
+                        <Label style={styles.text}>Product price<FieldRequired/></Label>
                         <Input
                             style={styles.text}
                             autoCorrect={false}
                             autoCapitalize="none"
-                            maxLength={30}
+                            maxLength={6}
                             keyboardType="numeric"
                             onChangeText={ (price) => { this.setState({ price })  } }
                             value= {this.state.price} />
                     </Item>
-                    <Label style={styles.text}></Label>
                     <Button full
                         onPress={() => {
                             if(this.validateForm()){

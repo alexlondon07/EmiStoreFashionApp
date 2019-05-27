@@ -181,7 +181,7 @@ class ClientForm extends Component {
     render() {
         return (
         <Container>
-            <Content>
+            <Content padder>
                 { this.state.loading && 
                     <Loading/>
                 }

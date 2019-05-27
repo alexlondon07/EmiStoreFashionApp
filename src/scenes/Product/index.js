@@ -60,14 +60,14 @@ class Product extends Component{
     }
 
     async deleteProduct(item, secId, rowId, rowMap){
-        loadingActivityIndicator(true);
+        this.loadingActivityIndicator(true);
 
         axios({
             method: 'DELETE',
             url: `${ BASE_API }${ HTTP_PRODUCT.deleteProduct }${ item.ideCategory }`,
         }).then(response => {
             
-            loadingActivityIndicator(false);
+            this.loadingActivityIndicator(false);
             if(response.status == 200){          
                 //Removemos de la Lista el Item Eliminado
                 rowMap[`${secId}${rowId}`].props.closeRow();
@@ -75,12 +75,12 @@ class Product extends Component{
                 newData.splice(rowId, 1);
                 this.setState({ productsList: newData });
             }else{
-                loadingActivityIndicator(false);
+                this.loadingActivityIndicator(false);
                 alert('Cannot delete item');
             }
             
         }).catch(error => {
-            loadingActivityIndicator(false);
+            this.loadingActivityIndicator(false);
             alert('Cannot delete item, An error has occurred, try it later');
         });
     }

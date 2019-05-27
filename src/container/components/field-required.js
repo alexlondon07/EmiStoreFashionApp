@@ -4,7 +4,7 @@ import {
 } from "react-native";
 
 const FieldRequired = props => (
-    <Text style={styles.textRequired}>*</Text>
+    <Text style={styles.textRequired}> * </Text>
 );
 
 const styles = StyleSheet.create({
